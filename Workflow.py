@@ -11,7 +11,7 @@ def doNothing():
 
 def checkWeekend():
     while (datetime.datetime.now().strftime("%A") == "Saturday" or datetime.datetime.now().strftime("%A") == "Sunday"):
-        doNothing()
+        time.sleep(86400)
 
 def getAssignments():
     loc = "/Users/yourname/Desktop/WorkFlow.xlsx"
@@ -52,7 +52,7 @@ def getAndSendWorkflow():
     except Exception as e:
         print("ERROR: " + e)
     finally:
-        time.sleep(2)
+        time.sleep(60)
         server.quit()
     print ("Successfully sent email to: " + str((msg['To'])) + " at: " + str(datetime.datetime.now().time()))
     GetDates()
@@ -60,12 +60,12 @@ def getAndSendWorkflow():
 def todayAt(hr, min=0, sec=0, micros=0):
        now = datetime.datetime.now().time()
        now = now.replace(hour=hr, minute=min, second=sec, microsecond=micros)
-       now = now.strftime("%H:%M:%S")
+       now = now.strftime("%H:%M")
        return now
 
 def dateFormat(dateTime):
     now = dateTime
-    now = now.strftime("%H:%M:%S")
+    now = now.strftime("%H:%M")
     return now
 
 def RunMail(sOT):
@@ -73,6 +73,8 @@ def RunMail(sOT):
         checkWeekend()
         if (str(dateFormat(datetime.datetime.now().time())) == str(sOT)):
             getAndSendWorkflow()
+        else:
+            time.sleep(10)
 
 def GetDates():
     if (dt.strftime("%A") == "Friday"):
@@ -82,4 +84,5 @@ def GetDates():
     checkWeekend()
     RunMail(sendOffTime)
 
-GetDates()
+if __name__ == "__main__":
+    GetDates()
